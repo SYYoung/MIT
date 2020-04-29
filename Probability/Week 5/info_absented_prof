@@ -1,0 +1,15 @@
+Here is an example: It is easier to imagine the same but in a discrete world where 2 students flip coins with parameter p. Instead of the time here is the number of tosses until 1st Heads. So 1st student starts flipping right away, but 2nd waits until 1st student flipped 5 times. If 1st didn't have Heads in these 5 first tosses then 2nd waits as long as 1st get it. You need to calculate the expected number of tosses of both 2 students.
+
+So here is also 2 scenarios.
+
+1st student had Heads in first 5 tosses, so 2nd starts flipping right after 5 tosses of the 1st.
+𝐸[𝑋|1𝑠𝑡≤5]=5+1/𝑝 
+
+1st student didn't have Heads in 5 tosses so 2nd waits until 1st have it.
+𝐸[𝑋|1𝑠𝑡>5]=5+1/𝑝+1/𝑝 
+
+Here in the second scenario no matter that 1st student had 5 tosses before because of the memoryless he still has the same probability to get 1st Heads for the first time, that is why the expected value for the 1st student is 5 + 1/p.
+
+Remember that we deal with conditional probabilities and expectations here. Imagine all the possible combinations of Heads and Tails: HHTHTH.... and then filter them in 2 categories: 1st where there is one or more Heads in 5 tosses, 2nd where there is no Heads in 5 tosses, you will see that 2nd category will have TTTTT at first and then all possible permutations of Heads and Tails distribution like TTTTTHHTHTH....
+
+
