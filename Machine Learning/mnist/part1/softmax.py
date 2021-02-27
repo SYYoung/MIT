@@ -56,7 +56,14 @@ def compute_cost_function(X, Y, theta, lambda_factor, temp_parameter):
         c - the cost value (scalar)
     """
     #YOUR CODE HERE
-    raise NotImplementedError
+    t1 = 0
+    n = X.shape[0]
+    h_x = compute_probabilities(X, theta, temp_parameter)
+    for i in np.arange(n):
+        t1 = t1 + Y[i] * np.log(h_x[Y[i], i])
+    t1 = t1 * -1/n
+    t2 = 0.5 * lambda_factor * np.sum((theta ** 2))
+    return t1 + t2
 
 def run_gradient_descent_iteration(X, Y, theta, alpha, lambda_factor, temp_parameter):
     """
@@ -76,7 +83,13 @@ def run_gradient_descent_iteration(X, Y, theta, alpha, lambda_factor, temp_param
         theta - (k, d) NumPy array that is the final value of parameters theta
     """
     #YOUR CODE HERE
-    raise NotImplementedError
+    n = len(Y)
+    k = theta.shape[0]
+    h_x = compute_probabilities(X, theta, temp_parameter)
+    M = sparse.coo_matrix(([1] * n, (Y, range(n))), shape=(k, n)).toarray()
+    t1 = np.matmul((M - h_x), X) * -1 / (temp_parameter * n)
+    delta_J = t1 + lambda_factor * theta
+    return (theta - alpha * delta_J)
 
 def update_y(train_y, test_y):
     """
