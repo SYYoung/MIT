@@ -184,6 +184,11 @@ test_pca = project_onto_PC(test_x, pcs, n_components, feature_means)
 
 # TODO: Train your softmax regression model using (train_pca, train_y)
 #       and evaluate its accuracy on (test_pca, test_y).
+theta, cost_function_history = softmax_regression(train_pca, train_y, temp_parameter=1, alpha=0.3,
+                                                      lambda_factor=1.0e-4,
+                                                      k=10, num_iterations=150)
+test_error = compute_test_error(test_pca, test_y, theta, temp_parameter=1)
+print('test error on run_PCA = ', test_error)
 
 
 # TODO: Use the plot_PC function in features.py to produce scatterplot
@@ -207,6 +212,12 @@ plot_images(train_x[1, ])
 
 ## Cubic Kernel ##
 # TODO: Find the 10-dimensional PCA representation of the training and test set
+n_components = 10
+
+train_x_centered, feature_means = center_data(train_x)
+pcs = principal_components(train_x_centered)
+train_pca10 = project_onto_PC(train_x, pcs, n_components, feature_means)
+test_pca10 = project_onto_PC(test_x, pcs, n_components, feature_means)
 
 
 # TODO: First fill out cubicFeatures() function in features.py as the below code requires it.
@@ -219,3 +230,8 @@ test_cube = cubic_features(test_pca10)
 
 # TODO: Train your softmax regression model using (train_cube, train_y)
 #       and evaluate its accuracy on (test_cube, test_y).
+theta, cost_function_history = softmax_regression(train_cube, train_y, temp_parameter=1, alpha=0.3,
+                                                      lambda_factor=1.0e-4,
+                                                      k=10, num_iterations=150)
+test_error_cube = compute_test_error(test_cube, test_y, theta, temp_parameter=1)
+print('test error on run cubic kernel  = ', test_error_cube)
