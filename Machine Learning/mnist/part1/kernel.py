@@ -20,8 +20,10 @@ def polynomial_kernel(X, Y, c, p):
             kernel_matrix - (n, m) Numpy array containing the kernel matrix
     """
     # YOUR CODE HERE
-    raise NotImplementedError
-
+    # K(x, y) = (x . y + c)^p
+    t1 = np.matmul(X, np.transpose(Y)) + c
+    t1 = t1**p
+    return t1
 
 
 def rbf_kernel(X, Y, gamma):
@@ -39,4 +41,9 @@ def rbf_kernel(X, Y, gamma):
             kernel_matrix - (n, m) Numpy array containing the kernel matrix
     """
     # YOUR CODE HERE
-    raise NotImplementedError
+    # calculate ||x-y||^2 = x^2 + y^2 - 2xy
+    px = np.sum(X**2, axis=1)[:,np.newaxis]
+    py = np.sum(Y**2, axis=1)
+    pxy = -2 * np.dot(X, np.transpose(Y))
+    t1 = (px + py +pxy)* -1 * gamma
+    return np.exp(t1)

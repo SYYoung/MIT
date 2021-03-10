@@ -190,3 +190,106 @@ def compute_test_error(X, Y, theta, temp_parameter):
     error_count = 0.
     assigned_labels = get_classification(X, theta, temp_parameter)
     return 1 - np.mean(assigned_labels == Y)
+
+## use kernel functions instead
+
+def compute_probabilities_kernel(X, Alpha, KernelF, temp_parameter):
+    """
+    Computes, for each datapoint X[i], the probability that X[i] is labeled as j
+    for j = 0, 1, ..., k-1
+
+    Args:
+        X - (n, d) NumPy array (n datapoints each with d features)
+        theta - (k, d) NumPy array, where row j represents the parameters of our model for label j
+        temp_parameter - the temperature parameter of softmax function (scalar)
+    Returns:
+        H - (k, n) NumPy array, where each entry H[j][i] is the probability that X[i] is labeled as j
+    """
+    #YOUR CODE HERE
+    t1 = np.matmul(theta, np.transpose(X)) / temp_parameter
+    c = np.max(t1, axis=0)
+    t1 = t1 - c
+    numerator = np.exp(t1)
+    denominator = np.sum(numerator, axis=0)
+    return numerator / denominator
+
+def compute_cost_function_kernel(X, Y, theta, lambda_factor, temp_parameter):
+    """
+    Computes the total cost over every datapoint.
+
+    Args:
+        X - (n, d) NumPy array (n datapoints each with d features)
+        Y - (n, ) NumPy array containing the labels (a number from 0-9) for each
+            data point
+        theta - (k, d) NumPy array, where row j represents the parameters of our
+                model for label j
+        lambda_factor - the regularization constant (scalar)
+        temp_parameter - the temperature parameter of softmax function (scalar)
+
+    Returns
+        c - the cost value (scalar)
+    """
+    #YOUR CODE HERE
+    t1 = 0
+    n = X.shape[0]
+    h_x = compute_probabilities(X, theta, temp_parameter)
+    for i in np.arange(n):
+        t1 = t1 + Y[i] * np.log(h_x[Y[i], i])
+    t1 = t1 * -1/n
+    t2 = 0.5 * lambda_factor * np.sum((theta ** 2))
+    return t1 + t2
+
+def run_gradient_descent_iteration_kernel(X, Y, theta, alpha, lambda_factor, temp_parameter):
+    """
+    Runs one step of batch gradient descent
+
+    Args:
+        X - (n, d) NumPy array (n datapoints each with d features)
+        Y - (n, ) NumPy array containing the labels (a number from 0-9) for each
+            data point
+        theta - (k, d) NumPy array, where row j represents the parameters of our
+                model for label j
+        alpha - the learning rate (scalar)
+        lambda_factor - the regularization constant (scalar)
+        temp_parameter - the temperature parameter of softmax function (scalar)
+
+    Returns:
+        theta - (k, d) NumPy array that is the final value of parameters theta
+    """
+    #YOUR CODE HERE
+    n = len(Y)
+    k = theta.shape[0]
+    h_x = compute_probabilities(X, theta, temp_parameter)
+    M = sparse.coo_matrix(([1] * n, (Y, range(n))), shape=(k, n)).toarray()
+    t1 = np.matmul((M - h_x), X) * -1 / (temp_parameter * n)
+    delta_J = t1 + lambda_factor * theta
+    return (theta - alpha * delta_J)
+
+def softmax_regression_kernel(X, Y, temp_parameter, alpha, lambda_factor, k, num_iterations):
+    """
+    Runs batch gradient descent for a specified number of iterations on a dataset
+    with theta initialized to the all-zeros array. Here, theta is a k by d NumPy array
+    where row j represents the parameters of our model for label j for
+    j = 0, 1, ..., k-1
+
+    Args:
+        X - (n, d - 1) NumPy array (n data points, each with d-1 features)
+        Y - (n, ) NumPy array containing the labels (a number from 0-9) for each
+            data point
+        temp_parameter - the temperature parameter of softmax function (scalar)
+        alpha - the learning rate (scalar)
+        lambda_factor - the regularization constant (scalar)
+        k - the number of labels (scalar)
+        num_iterations - the number of iterations to run gradient descent (scalar)
+
+    Returns:
+        theta - (k, d) NumPy array that is the final value of parameters theta
+        cost_function_progression - a Python list containing the cost calculated at each step of gradient descent
+    """
+    X = augment_feature_vector(X)
+    theta = np.zeros([k, X.shape[1]])
+    cost_function_progression_kernel = []
+    for i in range(num_iterations):
+        cost_function_progression_kernel.append(compute_cost_function_kernel(X, Y, theta, lambda_factor, temp_parameter))
+        theta = run_gradient_descent_iteration_kernel(X, Y, theta, alpha, lambda_factor, temp_parameter)
+    return theta, cost_function_progression_kernel
