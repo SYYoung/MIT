@@ -20,29 +20,37 @@ class CNN(nn.Module):
     def __init__(self, input_dimension):
         super(CNN, self).__init__()
         # TODO initialize model layers here
-        self.flatten = Flatten()
-        self.con1 = nn.Conv2d(1, 32, (3, 3))
-        self.ac1 = nn.ReLU()
-        self.pool1 = nn.MaxPool2d((2, 2))
-        self.con2 = nn.Conv2d(32, 64, (3, 3))
-        self.fc1 = nn.Linear(2880, 128)
-        self.drop = nn.Dropout()
-        self.fc2 = nn.Linear(128,1)
+        self.model = nn.Sequential(
+            nn.Conv2d(1, 32, (3, 3)),
+            nn.ReLU(),
+            nn.MaxPool2d((2, 2)),
+            nn.Conv2d(32, 64, (3, 3)),
+            nn.ReLU(),
+            nn.MaxPool2d((2, 2)),
+            Flatten(),
+            nn.Linear(1600, 128), # original = 2880
+            nn.Dropout(),
+            nn.Linear(128, 10)
+        )
 
 
     def forward(self, x):
 
         # TODO use model layers to predict the two digits
-        xf = self.con1(x)
-        xf = self.ac1(xf)
-        xf = self.pool1(xf)
-        xf = self.con2(xf)
-        xf = self.ac1(xf)
-        xf = self.pool1(xf)
-        xf = self.flatten(xf)
-        xf = self.fc1(xf)
-        out_first_digit = self.fc2(xf)
-        out_second_digit = out_first_digit
+        img_size = list(x.size())
+
+        # slice image for the first digit
+        img_index = int(img_size[2] * 2/3)
+        new_x = x[:, :, :img_index, :]
+        ans = self.model(new_x)
+        out_first_digit = ans
+
+        # for second digit
+        img_index = int(img_size[2] * 1 / 3)
+        new_x = x[:, :, img_index:, :]
+        # print('new_x size = ', new_x.size())
+        ans = self.model(new_x)
+        out_second_digit = ans
 
         return out_first_digit, out_second_digit
 
@@ -71,7 +79,7 @@ def main():
     model = CNN(input_dimension) # TODO add proper layers to CNN class above
 
     # Train
-    train_model(train_batches, dev_batches, model)
+    train_model(train_batches, dev_batches, model, n_epochs=10)
 
     ## Evaluate the model on test data
     loss, acc = run_epoch(test_batches, model.eval(), None)

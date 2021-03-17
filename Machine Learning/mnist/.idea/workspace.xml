@@ -4,8 +4,7 @@
     <list default="true" id="e0b719bc-dc97-4198-a7a8-4d9f22ebd4eb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/part2-twodigit/conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/part2-twodigit/conv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/part2-twodigit/mlp.py" beforeDir="false" afterPath="$PROJECT_DIR$/part2-twodigit/mlp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../week3_test2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../week3_test2.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part2-twodigit/mnist_model_fully_connected.pt" beforeDir="false" afterPath="$PROJECT_DIR$/part2-twodigit/mnist_model_fully_connected.pt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +26,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.mlp">
+  <component name="RunManager" selected="Python.conv">
     <configuration name="conv" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="mnist" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -135,8 +134,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.mlp" />
         <item itemvalue="Python.conv" />
+        <item itemvalue="Python.mlp" />
         <item itemvalue="Python.nnet_cnn" />
         <item itemvalue="Python.nnet_fc" />
         <item itemvalue="Python.neural_nets" />
@@ -188,6 +187,11 @@
           <url>file://$PROJECT_DIR$/part2-twodigit/mlp.py</url>
           <line>22</line>
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/part2-twodigit/conv.py</url>
+          <line>42</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
