@@ -19,11 +19,33 @@ class MLP(nn.Module):
         super(MLP, self).__init__()
         self.flatten = Flatten()
         # TODO initialize model layers here
+        new_input_dimension = int(input_dimension * 2/3)
+        self.model = nn.Sequential(
+                        nn.Linear(new_input_dimension, 128),
+                        nn.ReLU(),
+                        nn.Linear(128, 10)
+        )
+
 
     def forward(self, x):
+        # print('size of x = ', x.size())
         xf = self.flatten(x)
+        img_size = list(xf.size())
+        str1 = "xf size = {}, xf.size[0] = {}, xf.size[1] = {}".format(xf.size(), img_size[0], img_size[1])
+        # print(str1)
 
         # TODO use model layers to predict the two digits
+        new_img_index = int(img_size[1] * 2/3)
+        xf_slice = xf[:, 0:new_img_index]
+        # print('xf_slice size = ', xf_slice.size())
+        ans = self.model(xf_slice)
+        out_first_digit = ans
+
+        new_img_index = int(img_size[1] * 1/3)
+        xf_slice = xf[:, new_img_index:]
+        # print('second xf_slice size = ', xf_slice.size())
+        ans = self.model(xf_slice)
+        out_second_digit = ans
 
         return out_first_digit, out_second_digit
 
@@ -52,7 +74,7 @@ def main():
     model = MLP(input_dimension) # TODO add proper layers to MLP class above
 
     # Train
-    train_model(train_batches, dev_batches, model)
+    train_model(train_batches, dev_batches, model, n_epochs=30)
 
     ## Evaluate the model on test data
     loss, acc = run_epoch(test_batches, model.eval(), None)
