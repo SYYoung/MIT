@@ -7,7 +7,7 @@ import utils_multiMNIST as U
 path_to_data_dir = '../Datasets/'
 use_mini_dataset = True
 
-batch_size = 64
+batch_size = 64 # original: 64
 nb_classes = 10
 nb_epoch = 30
 num_classes = 10
@@ -21,17 +21,18 @@ class CNN(nn.Module):
         super(CNN, self).__init__()
         # TODO initialize model layers here
         self.model = nn.Sequential(
-            nn.Conv2d(1, 32, (3, 3)),
+            nn.Conv2d(1, 32, (3, 3)), # original 32
             nn.ReLU(),
             nn.MaxPool2d((2, 2)),
             nn.Conv2d(32, 64, (3, 3)),
             nn.ReLU(),
             nn.MaxPool2d((2, 2)),
             Flatten(),
-            nn.Linear(1600, 128), # original = 2880
+            nn.Linear(1600, 128), # original = 2880, then 1600, 960, # original 128 units
             nn.Dropout(),
             nn.Linear(128, 10)
         )
+
 
 
     def forward(self, x):
@@ -40,13 +41,13 @@ class CNN(nn.Module):
         img_size = list(x.size())
 
         # slice image for the first digit
-        img_index = int(img_size[2] * 2/3)
+        img_index = int(img_size[2] * 2/3) # original: 2/3
         new_x = x[:, :, :img_index, :]
         ans = self.model(new_x)
         out_first_digit = ans
 
         # for second digit
-        img_index = int(img_size[2] * 1 / 3)
+        img_index = int(img_size[2] * 1 / 3) # original: 1/3
         new_x = x[:, :, img_index:, :]
         # print('new_x size = ', new_x.size())
         ans = self.model(new_x)

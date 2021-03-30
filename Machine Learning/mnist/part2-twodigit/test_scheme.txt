@@ -1,0 +1,23 @@
+1. option: lr
+	. current value: 0.1, new value 0.01.	not working
+2. batch size: 
+	. current value 64, new value: 128:	not working
+3. image size:
+	. current value: first digit and second digit both are 28x28
+	. new value: first digit: 28x28, second digit: 21 x 28
+						not working
+4. full connected:
+	. current Linear 128, new value: 256	not working
+5. nn.dropout
+	. current value 0.5, new value 0.4	not working
+6. nn.conv2d
+	. current 32 filters, new: 64 filter 	not working
+7. remove nn.Dropout
+						not working
+
+further options:
+1. SGD -> Adam
+2. number of layers
+3. number of units/layers
+4. activation function
+5. momentum

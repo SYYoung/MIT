@@ -5,6 +5,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/part2-twodigit/conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/part2-twodigit/conv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/part2-twodigit/mnist_model_fully_connected.pt" beforeDir="false" afterPath="$PROJECT_DIR$/part2-twodigit/mnist_model_fully_connected.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/part2-twodigit/train_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/part2-twodigit/train_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../week3_test2.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../week3_test2.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,9 +191,14 @@
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/part2-twodigit/conv.py</url>
-          <line>42</line>
-          <option name="timeStamp" value="8" />
+          <url>file://$PROJECT_DIR$/part2-twodigit/train_utils.py</url>
+          <line>49</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/part2-twodigit/train_utils.py</url>
+          <line>63</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

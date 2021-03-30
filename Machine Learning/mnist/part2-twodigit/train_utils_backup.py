@@ -5,6 +5,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import torch.nn as nn
+import matplotlib.pyplot as plt
 
 
 class Flatten(nn.Module):
@@ -40,11 +41,11 @@ def train_model(train_data, dev_data, model, lr=0.01, momentum=0.9, nesterov=Fal
     # We optimize with SGD
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum, nesterov=nesterov)
 
-    ## ToDO
-    train_accuracies_first = []
-    train_accuracies_second = []
-    valid_accuracies_first = []
-    valid_accuracies_second = []
+    # ToDO
+    train_1 = np.zeros(n_epochs)
+    train_2 = np.zeros(n_epochs)
+    valid_1 = np.zeros(n_epochs)
+    valid_2 = np.zeros(n_epochs)
 
     for epoch in range(1, n_epochs + 1):
         print("-------------\nEpoch {}:\n".format(epoch))
@@ -52,24 +53,24 @@ def train_model(train_data, dev_data, model, lr=0.01, momentum=0.9, nesterov=Fal
         # Run **training***
         loss, acc = run_epoch(train_data, model.train(), optimizer)
         print('Train | loss1: {:.6f}  accuracy1: {:.6f} | loss2: {:.6f}  accuracy2: {:.6f}'.format(loss[0], acc[0], loss[1], acc[1]))
+        train_1[epoch] = acc[0]
+        train_2[epoch] = acc[1]
 
         # Run **validation**
         val_loss, val_acc = run_epoch(dev_data, model.eval(), optimizer)
         print('Valid | loss1: {:.6f}  accuracy1: {:.6f} | loss2: {:.6f}  accuracy2: {:.6f}'.format(val_loss[0], val_acc[0], val_loss[1], val_acc[1]))
+        valid_1[epoch] = val_acc[0]
+        valid_2[epoch] = val_acc[1]
 
         # Save model
         torch.save(model, 'mnist_model_fully_connected.pt')
 
         ## ToDO
-        train_accuracies_first.append(acc[0])
-        train_accuracies_second.append(acc[1])
-        valid_accuracies_first.append(val_acc[0])
-        valid_accuracies_second.append(val_acc[1])
-
-    print('train_accuracies_first = ', train_accuracies_first)
-    print('train_accuracies_second = ', train_accuracies_second)
-    print('valid_accuracies_first = ', valid_accuracies_first)
-    print('valid_accuracies_second = ', valid_accuracies_second)
+        plt.plot(train_1)
+        plt.plot(train_2)
+        plt.plot(valid_1)
+        plt.plot(valid_2)
+        plt.show()
 
 
 def run_epoch(data, model, optimizer):
