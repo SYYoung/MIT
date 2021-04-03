@@ -59,8 +59,25 @@ def mstep(X: np.ndarray, post: np.ndarray, mixture: GaussianMixture,
     Returns:
         GaussianMixture: the new gaussian mixture
     """
-    raise NotImplementedError
+    num, d = X.shape
+    K = post.shape[1]
+    nj = np.sum(post, axis=0)
+    pj = nj/num
+    u = np.matmul(np.transpose(post), X)
+    mu = u/nj.reshape(len(nj), 1)
 
+    post_sum = np.sum(post, axis=0)
+    var = np.zeros(K)
+
+    for j in np.arange(K):
+        diff = X - mu[j]
+        diff = np.linalg.norm(diff, axis=1) ** 2
+        v = np.sum(post[:,j] * diff)
+        # v = np.transpose(post[:,j]) * diff
+        var[j] = v/(d * nj[j])
+
+    new_mixture = GaussianMixture(mu, var, pj)
+    return new_mixture
 
 def run(X: np.ndarray, mixture: GaussianMixture,
         post: np.ndarray) -> Tuple[GaussianMixture, np.ndarray, float]:
@@ -77,8 +94,16 @@ def run(X: np.ndarray, mixture: GaussianMixture,
             for all components for all examples
         float: log-likelihood of the current assignment
     """
-    pj_x, loglikehood = estep(X, mixture)
-    return mixture, pj_x, loglikehood
+    l_old = 0
+    not_converge = True
+    while (not_converge):
+        post, loglikehood = estep(X, mixture)
+        mixture = mstep(X, post, mixture)
+        ans = 'logLikelihood = {}'.format(loglikehood)
+        # print(ans)
+        not_converge = np.abs(loglikehood - l_old) >= (10**-6 * np.abs(loglikehood))
+        l_old = loglikehood
+    return mixture, post, loglikehood
 
 
 def fill_matrix(X: np.ndarray, mixture: GaussianMixture) -> np.ndarray:
