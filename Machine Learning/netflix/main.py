@@ -21,7 +21,7 @@ for i in np.arange(len(K_list)):
         ans2 = 'Cost = {}'.format(cost)
         all_cost[i][j] = cost
         print(ans2)
-    common.plot(X, mixture, post, ans1)
+    # common.plot(X, mixture, post, ans1)
 
 print(all_cost)
 print(np.min(all_cost, axis=1))
@@ -41,7 +41,15 @@ for i in np.arange(len(K_list)):
         ans2 = 'Cost = {}'.format(likelihood)
         all_cost[i][j] = likelihood
         print(ans2)
-    common.plot(X, mixture, post, ans1)
+    # common.plot(X, mixture, post, ans1)
 
 print(all_cost)
 print(np.min(all_cost, axis=1))
+
+## calculate bic
+best_likelihood = np.min(all_cost, axis=1)
+bic_list = np.zeros(len(best_likelihood))
+for i in np.arange(len(best_likelihood)):
+    mixture, post = common.init(X, K_list[i], 0)
+    bic_list[i] = common.bic(X, mixture, best_likelihood[i])
+print(bic_list)
