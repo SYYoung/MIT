@@ -136,11 +136,15 @@ def estep(X: np.ndarray, mixture: GaussianMixture) -> Tuple[np.array, float]:
     lj_x = []
     loglikelihood = 0
     for i in np.arange(num):
-        nn = np.array([norm.pdf(X[i,cu[i]], mean=mu[j,cu[i]], cov=(var[j])) for j in np.arange(K)])
-        # for numerical stability, use logsumexp and take out the average
-        fu_j = logp_j + np.log(nn)
-        x_max = max(fu_j)
-        lj_u = fu_j - (x_max + logsumexp(fu_j - x_max))
+        if (len(cu[i]) == 0):
+            fu_j = logp_j
+            lj_u = fu_j
+        else:
+            nn = np.array([norm.pdf(X[i,cu[i]], mean=mu[j,cu[i]], cov=(var[j])) for j in np.arange(K)])
+            # for numerical stability, use logsumexp and take out the average
+            fu_j = logp_j + np.log(nn)
+            x_max = max(fu_j)
+            lj_u = fu_j - (x_max + logsumexp(fu_j - x_max))
         lj_x.append(lj_u)
         loglikelihood = loglikelihood + np.dot((fu_j - lj_u), np.exp(lj_u))
     lj_x = np.array(lj_x).reshape((num, K))
