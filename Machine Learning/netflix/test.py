@@ -6,11 +6,11 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
-# X = np.loadtxt("test_incomplete.txt")
+X = np.loadtxt("test_incomplete.txt")
 # X_gold = np.loadtxt("test_complete.txt")
 
-X = np.loadtxt("toy_data.txt")
-K = 3
+# X = np.loadtxt("toy_data.txt")
+K = 4
 seed = 0
 
 # K = 6

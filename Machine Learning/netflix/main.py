@@ -37,7 +37,7 @@ for i in np.arange(len(K_list)):
         ans1 = 'EM algorithm: K = {}, seed = {}'.format(K_list[i], seed_list[j])
         print(ans1)
         mixture, post = common.init(X, K_list[i], seed_list[j])
-        mixture, post, likelihood = em.run(X, mixture, post)
+        mixture, post, likelihood = em.naive_run(X, mixture, post)
         ans2 = 'Cost = {}'.format(likelihood)
         all_cost[i][j] = likelihood
         print(ans2)
