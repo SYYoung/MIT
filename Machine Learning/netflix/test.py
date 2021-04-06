@@ -10,7 +10,7 @@ X = np.loadtxt("testcase3.txt")
 # X_gold = np.loadtxt("test_complete.txt")
 
 # X = np.loadtxt("toy_data.txt")
-K = 4
+K = 6
 seed = 0
 
 # K = 6

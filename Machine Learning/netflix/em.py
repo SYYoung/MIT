@@ -197,10 +197,10 @@ def mstep(X: np.ndarray, post: np.ndarray, mixture: GaussianMixture,
     mu = mu / denom
     # 3. replace the old mu if it passes the criteria
     mu_old = mixture.mu
-    criteria = np.sum(denom, axis = 1)
-    for i in np.arange(K):
-        if (criteria[i] < 1):
-            mu[i] = mu_old[i]
+    for j in np.arange(K):
+        for feature in np.arange(d):
+            if (denom[j,feature] < 1):
+                mu[j,feature] = mu_old[j,feature]
 
     post_sum = np.sum(post, axis=0)
     v = np.zeros((num))
