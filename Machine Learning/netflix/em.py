@@ -173,18 +173,51 @@ def mstep(X: np.ndarray, post: np.ndarray, mixture: GaussianMixture,
     K = post.shape[1]
     nj = np.sum(post, axis=0)
     pj = nj/num
-    u = np.matmul(np.transpose(post), X)
-    mu = u/nj.reshape(len(nj), 1)
+
+    # 1. build up delta array
+    cu = []
+    delta_list = []
+    cu_mag = []
+    for n in np.arange(num):
+        mask_flag = [i for i in np.arange(d) if X[n, i] != 0]
+        delta_flag = [1 if X[n, i] != 0 else 0 for i in np.arange(d) ]
+        cu.append(mask_flag)
+        delta_list.append((delta_flag))
+        cu_mag.append(len(mask_flag))
+    delta = np.array(delta_list).reshape((num, d))
+
+    # 2. calculate mu
+    mu = np.zeros((K, d))
+    for i in np.arange(K):
+        temp = np.reshape(post[:,i], (num, 1))
+        temp = temp * delta * X
+        mu[i] = np.sum(temp, axis=0)
+
+    denom = np.matmul(np.transpose(post), delta)
+    mu = mu / denom
+    # 3. replace the old mu if it passes the criteria
+    mu_old = mixture.mu
+    criteria = np.sum(denom, axis = 1)
+    for i in np.arange(K):
+        if (criteria[i] < 1):
+            mu[i] = mu_old[i]
 
     post_sum = np.sum(post, axis=0)
+    v = np.zeros((num))
     var = np.zeros(K)
 
+    # 4. calculate variance
+    norm_val = np.zeros(num)
     for j in np.arange(K):
-        diff = X - mu[j]
-        diff = np.linalg.norm(diff, axis=1) ** 2
-        v = np.sum(post[:,j] * diff)
-        # v = np.transpose(post[:,j]) * diff
-        var[j] = v/(d * nj[j])
+        for i in np.arange(num):
+            diff = X[i,cu[i]] - mu[j,cu[i]]
+            diff = np.linalg.norm(diff) ** 2
+            v[i] = diff
+        numerator = np.dot(post[:,j], v)
+        denom = np.dot(post[:,j], np.array(cu_mag))
+        var[j] = numerator / denom
+        if (var[j] < min_variance):
+            var[j] = min_variance
 
     new_mixture = GaussianMixture(mu, var, pj)
     return new_mixture
@@ -210,7 +243,8 @@ def run(X: np.ndarray, mixture: GaussianMixture,
     not_converge = True
     while (not_converge):
         post, loglikehood = estep(X, mixture)
-        not_converge = true
+        mixture = mstep(X, post, mixture)
+        not_converge = False
     return mixture, post, loglikehood
 
 def fill_matrix(X: np.ndarray, mixture: GaussianMixture) -> np.ndarray:

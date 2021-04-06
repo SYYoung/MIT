@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
-X = np.loadtxt("test_incomplete.txt")
+X = np.loadtxt("testcase3.txt")
 # X_gold = np.loadtxt("test_complete.txt")
 
 # X = np.loadtxt("toy_data.txt")
@@ -28,6 +28,9 @@ for i in np.arange(iter):
     mixture, post, likelihood = em.run(X, mixture, post)
     ans2 = 'New log likelihood = {}'.format(likelihood)
     loglikelihood_list[i] = likelihood
+    print('mu = \n', mixture.mu)
+    print('variance = \n', mixture.var)
+    print('p = \n', mixture.p)
 
 print(loglikelihood_list)
 plt.plot(loglikelihood_list)
