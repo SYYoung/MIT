@@ -130,21 +130,27 @@ def estep(X: np.ndarray, mixture: GaussianMixture) -> Tuple[np.array, float]:
     for n in np.arange(num):
         mask_flag = [i for i in np.arange(d) if X[n,i] != 0]
         cu.append(mask_flag)
-    logp_j = np.transpose(np.log(p))
+    logp_j = np.transpose(np.log(p + 1e-16))
 
     # 1. build nn
     lj_x = []
     loglikelihood = 0
+
     for i in np.arange(num):
+        # for numerical stability, use logsumexp and take out the average
         if (len(cu[i]) == 0):
             fu_j = logp_j
             lj_u = fu_j
         else:
             nn = np.array([norm.pdf(X[i,cu[i]], mean=mu[j,cu[i]], cov=(var[j])) for j in np.arange(K)])
-            # for numerical stability, use logsumexp and take out the average
-            fu_j = logp_j + np.log(nn)
-            x_max = max(fu_j)
-            lj_u = fu_j - (x_max + logsumexp(fu_j - x_max))
+            # for numerical stability, if nn is too small, set fu_j and lj_u to be logp_j
+            if (np.sum(nn) < 1e-6):
+                fu_j = logp_j
+                lj_u = fu_j
+            else:
+                fu_j = logp_j + np.log(nn)
+                x_max = max(fu_j)
+                lj_u = fu_j - (x_max + logsumexp(fu_j - x_max))
         lj_x.append(lj_u)
         loglikelihood = loglikelihood + np.dot((fu_j - lj_u), np.exp(lj_u))
     lj_x = np.array(lj_x).reshape((num, K))
@@ -191,9 +197,9 @@ def mstep(X: np.ndarray, post: np.ndarray, mixture: GaussianMixture,
     for i in np.arange(K):
         temp = np.reshape(post[:,i], (num, 1))
         temp = temp * delta * X
-        mu[i] = np.sum(temp, axis=0)
+        mu[i] = np.sum(temp, axis=0) + 1e-16
 
-    denom = np.matmul(np.transpose(post), delta)
+    denom = np.matmul(np.transpose(post), delta) + 1e-16
     mu = mu / denom
     # 3. replace the old mu if it passes the criteria
     mu_old = mixture.mu
@@ -213,8 +219,8 @@ def mstep(X: np.ndarray, post: np.ndarray, mixture: GaussianMixture,
             diff = X[i,cu[i]] - mu[j,cu[i]]
             diff = np.linalg.norm(diff) ** 2
             v[i] = diff
-        numerator = np.dot(post[:,j], v)
-        denom = np.dot(post[:,j], np.array(cu_mag))
+        numerator = np.dot(post[:,j], v) + 1e-16
+        denom = np.dot(post[:,j], np.array(cu_mag)) + 1e-16
         var[j] = numerator / denom
         if (var[j] < min_variance):
             var[j] = min_variance
@@ -238,13 +244,15 @@ def run(X: np.ndarray, mixture: GaussianMixture,
         float: log-likelihood of the current assignment
     """
 
-
     l_old = 0
     not_converge = True
     while (not_converge):
         post, loglikehood = estep(X, mixture)
         mixture = mstep(X, post, mixture)
-        not_converge = False
+        ans = 'logLikelihood = {}'.format(loglikehood)
+        print(ans)
+        not_converge = np.abs(loglikehood - l_old) >= (10**-6 * np.abs(loglikehood) + 1e-16)
+        l_old = loglikehood
     return mixture, post, loglikehood
 
 def fill_matrix(X: np.ndarray, mixture: GaussianMixture) -> np.ndarray:
@@ -257,4 +265,17 @@ def fill_matrix(X: np.ndarray, mixture: GaussianMixture) -> np.ndarray:
     Returns
         np.ndarray: a (n, d) array with completed data
     """
-    raise NotImplementedError
+    post, loglikehood = estep(X, mixture)
+    mu = mixture.mu
+    num, d = X.shape
+    X_pred = np.copy(X)
+    K = mu.shape[0]
+
+    for n in np.arange(num):
+        mask_flag = [i for i in np.arange(d) if X[n, i] == 0]
+        # if there is any entry missing, get a predicted value
+        if (len(mask_flag) > 0):
+            predicted = np.matmul(post[n], mu)
+            X_pred[n, mask_flag] = predicted[mask_flag]
+
+    return X_pred
