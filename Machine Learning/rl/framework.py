@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-DEBUG = False
+DEBUG = True
 DEFAULT_REWARD = -0.01 # Negative reward for each non-terminal step
 JUNK_CMD_REWARD = -0.1 # Negative reward for invalid commands
 QUEST_REWARD = 1 # positive reward for finishing quest
@@ -140,9 +140,9 @@ def step_game(current_room_desc, current_quest_desc, action_index, object_index)
         next_room_name = rooms[next_room_index]
         next_room_desc_index = np.random.randint(len(rooms_desc[next_room_name]))
         next_room_desc = rooms_desc[next_room_name][next_room_desc_index]
-        #if DEBUG:
-            #print('Reward: %1.3f' % (reward,))
-            #print('Transit to Room %d:%s. %s' %(next_room_index, rooms[next_room_index],rooms_desc[next_room_name][next_room_desc_index]))
+        if DEBUG:
+            print('Reward: %1.3f' % (reward,))
+            print('Transit to Room %d:%s. %s' %(next_room_index, rooms[next_room_index],rooms_desc[next_room_name][next_room_desc_index]))
 
     else:
         # penalty for invalid command
@@ -150,10 +150,10 @@ def step_game(current_room_desc, current_quest_desc, action_index, object_index)
         # state remains the same when invalid command executed
         next_room_desc = current_room_desc
 
-        # if DEBUG:
-        #     print('Invalid command!')
-        #     print('Reward: %1.3f' % (reward,))
-        #     print('Remain in Room %d:%s' %(next_room_index, rooms[next_room_index],))
+        if DEBUG:
+            print('Invalid command!')
+            print('Reward: %1.3f' % (reward,))
+            print('Remain in Room %s', next_room_desc)
 
     # quest remains the same during each episode
     next_quest_desc = current_quest_desc

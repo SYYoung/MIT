@@ -1,9 +1,13 @@
 """Tabular QL agent"""
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from tqdm import tqdm
 import framework
 import utils
+
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 DEBUG = False
 
@@ -13,8 +17,8 @@ TESTING_EP = 0.05  # epsilon-greedy parameter for testing
 NUM_RUNS = 10
 NUM_EPOCHS = 200
 # by me
-NUM_EPIS_TRAIN = 2  # number of episodes for training at each epoch
-NUM_EPIS_TEST = 0  # number of episodes for testing
+NUM_EPIS_TRAIN = 25  # number of episodes for training at each epoch
+NUM_EPIS_TEST = 50  # number of episodes for testing
 
 ## original
 # NUM_EPIS_TRAIN = 25  # number of episodes for training at each epoch
@@ -111,6 +115,7 @@ def run_episode(for_training):
     # initialize for each episode
     # TODO Your code here
     epi_reward = 0
+    t = 0
 
     (current_room_desc, current_quest_desc, terminal) = framework.newGame()
 
@@ -141,7 +146,8 @@ def run_episode(for_training):
             next_room_desc, next_quest_desc, reward, terminal = framework.step_game(
                 current_room_desc, current_quest_desc,
                 action_index, object_index)
-            epi_reward = epi_reward + reward
+            epi_reward = epi_reward + reward * (GAMMA**t)
+            t = t + 1
 
         # prepare next step
         # TODO Your code here
