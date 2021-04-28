@@ -15,7 +15,7 @@ GAMMA = 0.5  # discounted factor
 TRAINING_EP = 0.5  # epsilon-greedy parameter for training
 TESTING_EP = 0.05  # epsilon-greedy parameter for testing
 NUM_RUNS = 10
-NUM_EPOCHS = 200
+NUM_EPOCHS = 400
 # by me
 NUM_EPIS_TRAIN = 25  # number of episodes for training at each epoch
 NUM_EPIS_TEST = 50  # number of episodes for testing
@@ -24,6 +24,7 @@ NUM_EPIS_TEST = 50  # number of episodes for testing
 # NUM_EPIS_TRAIN = 25  # number of episodes for training at each epoch
 # NUM_EPIS_TEST = 50  # number of episodes for testing
 
+# ALPHA will be set as: 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 0.5, 1
 ALPHA = 0.1  # learning rate for training
 
 ACTIONS = framework.get_actions()
@@ -182,12 +183,14 @@ def run():
 
     single_run_epoch_rewards_test = []
     pbar = tqdm(range(NUM_EPOCHS), ncols=80)
-    for _ in pbar:
-        single_run_epoch_rewards_test.append(run_epoch())
+    for i in pbar:
+        reward_epoch = run_epoch()
+        single_run_epoch_rewards_test.append(reward_epoch)
         pbar.set_description(
             "Avg reward: {:0.6f} | Ewma reward: {:0.6f}".format(
                 np.mean(single_run_epoch_rewards_test),
                 utils.ewma(single_run_epoch_rewards_test)))
+        ans = 'number of epoch: {}, reward = {}'.format(i, reward_epoch)
     return single_run_epoch_rewards_test
 
 

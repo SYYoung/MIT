@@ -47,7 +47,16 @@ def epsilon_greedy(state_vector, theta, epsilon):
     """
     # TODO Your code here
     action_index, object_index = None, None
-    return (action_index, object_index)
+    max_cur_index = np.argmax(theta @ state_vector)
+    max_cur_tuple = index2tuple(max_cur_index)
+
+    # get random
+    rand_choice_tuple = (np.random.choice(NUM_ACTIONS, 1)[0], np.random.choice(NUM_OBJECTS, 1)[0])
+
+    the_choice = (rand_choice_tuple, max_cur_tuple)
+    choice = np.random.choice(2, 1, p = [epsilon, 1-epsilon])
+    return the_choice[choice[0]]
+
 # pragma: coderesponse end
 
 
@@ -168,4 +177,4 @@ if __name__ == '__main__':
     axis.set_ylabel('reward')
     axis.set_title(('Linear: nRuns=%d, Epilon=%.2f, Epi=%d, alpha=%.4f' %
                     (NUM_RUNS, TRAINING_EP, NUM_EPIS_TRAIN, ALPHA)))
-
+    plt.show()

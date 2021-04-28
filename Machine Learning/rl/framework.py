@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-DEBUG = True
+DEBUG = False
 DEFAULT_REWARD = -0.01 # Negative reward for each non-terminal step
 JUNK_CMD_REWARD = -0.1 # Negative reward for invalid commands
 QUEST_REWARD = 1 # positive reward for finishing quest
