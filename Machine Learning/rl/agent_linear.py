@@ -86,9 +86,10 @@ def linear_q_learning(theta, current_state_vector, action_index, object_index,
     else:
         y = reward
     q_value = (theta @ current_state_vector)[tuple2index(action_index, object_index)]
-    g_theta = (y - q_value) * current_state_vector
+    delta = ALPHA * (y - q_value) * current_state_vector
+    update_ind = tuple2index(action_index, object_index)
     # 2. then update theta
-    theta[action_index,:] = theta[action_index,:] + ALPHA * g_theta
+    theta[update_ind] = theta[update_ind] + delta
 
     return None  # This function shouldn't return anything
 # pragma: coderesponse end
