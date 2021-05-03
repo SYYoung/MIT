@@ -84,12 +84,29 @@ def deep_q_learning(current_state_vector, action_index, object_index, reward,
     q_value_cur_state = model(current_state_vector)
 
     # TODO Your code here
-
+    if (terminal):
+        y = reward
+    else:
+        y = reward + GAMMA * maxq_next
     loss = None
 
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
+
+
+    if (terminal == False):
+        new_val = reward + GAMMA * np.max(q_func[next_state_1, next_state_2])
+        q_func[current_state_1, current_state_2, action_index, object_index] = \
+                ALPHA * new_val + (1 - ALPHA) * \
+                q_func[current_state_1, current_state_2, action_index, object_index]
+    else:
+        q_func[current_state_1, current_state_2, action_index,
+               object_index] = ALPHA * reward + (1 - ALPHA) * \
+                               q_func[current_state_1, current_state_2, action_index, object_index]
+
+
+    return None  # This function shouldn't return anything
 # pragma: coderesponse end
 
 
