@@ -1,0 +1,5 @@
+when we run main.py, if it crashes, modify following code in utils.py:
+
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt

@@ -1,0 +1,184 @@
+.xmodule_display .mymodal-wrap {
+  /*margin: 16px;*/
+  text-align: center; }
+
+.xmodule_display .mymodal-btn {
+  border: 1px solid #0074b4;
+  border-radius: 3px;
+  color: #fff;
+  display: inline-block;
+  background-color: #0074b4;
+  padding: 7px 18px;
+  text-decoration: none;
+  background-clip: padding-box;
+  text-align: center;
+  min-width: 60px;
+  position: relative;
+  font-size: 0.8125em;
+  transition: color .1s ease;
+}
+.xmodule_display .mymodal-btn:hover {
+  background: #005278; }
+.xmodule_display .mymodal-btn .mymodal-btn-big {
+  font-size: 18px;
+  padding: 15px 20px;
+  min-width: 100px; }
+.xmodule_display a.mymodal-btn:link,
+.xmodule_display a.mymodal-btn:hover,
+.xmodule_display a.mymodal-btn:visited {
+  color: #fff;
+}
+
+.xmodule_display .mymodal-btn-close {
+  color: #aaaaaa;
+  font-size: 30px;
+  text-decoration: none;
+  position: absolute;
+  right: 5px;
+  top: 0; }
+.xmodule_display a.mymodal-btn-close:link,
+.xmodule_display a.mymodal-btn-close:visited {
+  color: #aaaaaa; }
+.xmodule_display a.mymodal-btn-close:hover {
+  color: #909090; }
+
+.xmodule_display.xmodule_CapaModule div.formulainput {
+  padding-left: 15px;
+}
+
+.xmodule_display.xmodule_CapaModule table.formulainput {
+  table-layout: fixed;
+  border: 1px solid;
+  padding: .5em .75em .5em .75em;
+
+}
+
+.xmodule_display.xmodule_CapaModule table tr.formulainput {
+  border: 1px solid;
+}
+
+.xmodule_display.xmodule_CapaModule table tr.fiptitle {
+  border: 2px solid;
+}
+
+.xmodule_display.xmodule_CapaModule div.problem table th.formulainput {
+  padding: .5em .25em .5em .75em;
+}
+
+
+.xmodule_display.xmodule_CapaModule div.problem table th.col1 {
+  padding: .5em .25em .5em .75em;
+  width:250px;
+  text-transform: capitalize;
+}
+
+
+.xmodule_display.xmodule_CapaModule div.problem table th.col2 {
+  padding: .5em .25em .5em .75em;
+  width:350px;
+  text-transform: capitalize;
+}
+.xmodule_display.xmodule_CapaModule div.problem table th.col3 {
+  padding: .5em .25em .5em .75em;
+  width:350px;
+  text-transform: capitalize;
+}
+.xmodule_display.xmodule_CapaModule div.problem table th.col4 {
+  padding: .5em .25em .5em .75em;
+  width:200px;
+  text-transform: capitalize;
+}
+
+
+.xmodule_display.xmodule_CapaModule div.problem table th:nth-child(){
+  text-transform: capitalize;
+}
+
+
+
+
+
+
+.xmodule_display.xmodule_CapaModule div.problem table td.col2 {
+  padding: .5em .25em .5em .75em;
+  width:350px;
+}
+
+
+.xmodule_display.xmodule_CapaModule div.problem table td.col3 {
+  padding: .5em .25em .5em .75em;
+  width:350px;
+}
+
+.xmodule_display.xmodule_CapaModule div.problem table td.col4 {
+  padding: .5em .25em .5em .75em;
+  width:200px
+}
+
+
+.mymodal:before {
+  content: "";
+  background: rgba(0, 0, 0, 0);
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.mymodal:target:before {
+  -webkit-transition: -webkit-transform 0.9s ease-out;
+  -moz-transition: -moz-transform 0.9s ease-out;
+  -o-transition: -o-transform 0.9s ease-out;
+  transition: transform 0.9s ease-out;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.mymodal-positioner {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+.mymodal:target + .mymodal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+  left: 0px; }
+
+.xmodule_display .mymodal-dialog {
+  background: #fefefe;
+  border: #333333 solid 1px;
+  border-radius: 5px;
+  margin: 0 35px;
+  position: absolute;
+  top: -150px;
+  left: -2000px;
+  z-index: 1001;
+  width: 1170px;
+  -webkit-transform: translate(0, -500%);
+  -ms-transform: translate(0, -500%);
+  transform: translate(0, -500%);
+}
+
+.mymodal-body {
+  padding: 0px 15px;
+}
+
+.mymodal-header {
+  padding: 10px 15px 0;
+}
+
+.mymodal-footer {
+  padding: 10px 15px; }
+
+.mymodal-header {
+  border-bottom: #eeeeee solid 1px; }
+  .mymodal-header h2 {
+    font-size: 24px;
+    margin: 5px 0;}
+
+.mymodal-footer {
+  border-top: #eeeeee solid 1px;
+  text-align: right; }
