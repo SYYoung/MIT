@@ -166,8 +166,8 @@ print('mnist_data_all loaded. shape of single images is', mnist_data_all[0]["ima
 
 # HINT: change the [0] and [1] if you want to access different images
 print(mnist_data_all.keys())
-d0 = mnist_data_all[0]["images"]
-d1 = mnist_data_all[1]["images"]
+d0 = mnist_data_all[9]["images"]
+d1 = mnist_data_all[0]["images"]
 y0 = np.repeat(-1, len(d0)).reshape(1,-1)
 y1 = np.repeat(1, len(d1)).reshape(1,-1)
 
@@ -205,7 +205,7 @@ def col_average_features(x):
     @return (n,n_samples) array where each entry is the average of a column
     """
     n_samples, m, n = x.shape
-    col_avg = np.mean(x, axis=0)
+    col_avg = np.mean(x, axis=2)
     return col_avg.T
 
 def top_bottom_features(x):
@@ -218,13 +218,13 @@ def top_bottom_features(x):
     and the second entry is the average of the bottom half of the image
     = rows floor(m/2) [inclusive] to m
     """
-    m, n = x.shape
-    top_image = x[0:m//2, :]
-    bot_image = x[m//2:, :]
-    top_avg = np.mean(top_image)
-    bot_avg = np.mean(bot_image)
+    _, m, n = x.shape
+    top_image = x[:,0:m//2, :]
+    bot_image = x[:,m//2:, :]
+    top_avg = np.mean(top_image, axis=(1,2))
+    bot_avg = np.mean(bot_image, axis=(1,2))
 
-    return np.array([[top_avg], [bot_avg]])
+    return np.vstack((top_avg, bot_avg))
 
 
 # use this function to evaluate accuracy
