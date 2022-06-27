@@ -234,8 +234,13 @@ def svm_obj_grad(X, y, th, th0, lam):
 def batch_svm_min(data, labels, lam):
     def svm_min_step_size_fn(i):
        return 2/(i+1)**0.5
-    pass
 
+    d, n = data.shape
+    th = np.zeros((d, 1))
+    th0 = np.zeros((1, 1))
+    th_all = np.vstack((th, th0))
+    new_x, fs, xs = gd(svm_obj, svm_obj_grad, th_all, svm_min_step_size_fn, max_iter=10)
+    return  (new_x, fs, xs)
 
 def q7_2():
     X1 = np.array([[1, 2, 3, 9, 10]])
@@ -324,4 +329,6 @@ print("q7_1()")
 q7_1()
 print("q7_2()")
 q7_2()
+print("q7_3()")
+q7_3()
 
